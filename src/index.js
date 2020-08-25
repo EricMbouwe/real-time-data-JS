@@ -1,18 +1,40 @@
 import './main.scss'
 
-console.log("Icecat live test dev ")
+const content = document.getElementById('IcecatLive')
+
+const card = (item) => `
+    <div class='card mx-3' style='width: 15rem;>
+        <div class='card-body'>
+          <h5 class='card-title'>${item.Brand}</h5>
+          <h6 class='card-subtitle mb-2 text-muted'>${item.ProductCode}</h6>
+          <p class='card-text'>${item.GTIN}</p>
+        </div>
+    </div>`
+
+const render = (() => {
+  const ele = document.createElement('div');
+  const item = getData()
+  ele.innerHTML = card(item);
+  content.appendChild(ele);
+})()
 
 // make the Live Icecat library call
-setTimeout(function () {
-  IcecatLive.getDatasheet('#IcecatLive', {
-    'UserName': 'openIcecat-live', 
-    'Brand': 'HP', 
-    'ProductCode': 'F0Y97EA'
-  }, 'en');
-}, 200)
+async function getData() {
+  try {
+    const data = await IcecatLive.getDatasheet('#IcecatLive', {
+      'UserName': 'openIcecat-live',
+      'Brand': 'HP',
+      'ProductCode': 'F0Y97EA'
+    }, 'en');
+    return data
+  } catch (error) {
+    // console.log(error);
+    console.log('error occured');
+  }
+}
 
 function getDataByAllParams() {
-  setTimeout(function () {
+  setTimeout(() => {
     IcecatLive.getDatasheet('#IcecatLive', {
       'UserName': 'userShopName',
       'GTIN': '1234567891234',
@@ -23,32 +45,33 @@ function getDataByAllParams() {
   }, 200)
 }
 
+
 // call by Brand + Manufacturer Product Code
 
-function getDataByBrand() {
+function getDataByBrand(brand, productCode) {
   IcecatLive.getDatasheet('#IcecatLive', {
     'UserName': 'demoshop',
-    'Brand': 'Philips', 
-    'ProductCode': '123456789'
+    'Brand': brand,
+    'ProductCode': productCode
   }, 'en', 200)
 }
 
 
 // call by GTIN code (EAN or UPC or JAN)
 
-function getDataByGTIN() {
+function getDataByGTIN(gtin) {
   IcecatLive.getDatasheet('#IcecatLive', {
     'UserName': 'demoshop',
-    'GTIN': '8478097595798729'
+    'GTIN': gtin
   }, 'en', 200)
 }
 
 
 // call by IcecatProductId
 
-function getDataByProductID() {
+function getDataByProductID(productId) {
   IcecatLive.getDatasheet('#IcecatLive', {
     'UserName': 'demoshop',
-    'IcecatProductId': '123456'
+    'IcecatProductId': productId
   }, 'en', 200);
 }
